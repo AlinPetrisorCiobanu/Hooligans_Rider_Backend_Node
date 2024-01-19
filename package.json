@@ -1,8 +1,10 @@
 {
   "name": "backend_hooligan",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/app.js",
   "scripts": {
+    "start": "tsc && node -r dotenv-safe/config",
+    "dev": "tsc ./src/*.tsc --outDir ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,5 +20,13 @@
     "mongoose": "^8.1.0",
     "node": "^21.2.0",
     "nodemon": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/mongoose": "^5.11.97",
+    "typescript": "^5.3.3"
   }
 }
