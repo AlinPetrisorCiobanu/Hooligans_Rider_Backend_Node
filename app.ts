@@ -3,6 +3,7 @@ import CONFIDENCE from "./src/config/config_conexion";
 import conexionBBD from "./src/database/DataBase";
 import cors from "cors";
 import router_user from "./src/Entities/Users/Router";
+import errorHandler from "./src/Middleware/Middleware";
 
 
 //initalization
@@ -19,5 +20,8 @@ app.use('/api/user',router_user)
 
 //instancio la base de datos
 conexionBBD;
+
+//errores://
+app.use(errorHandler)
 
 export default app
