@@ -1,5 +1,5 @@
 import mongoose,{ConnectOptions} from "mongoose";
-import CONFIDENCE from "./config_conexion";
+import CONFIDENCE from "../config/config_conexion";
 
 
 export const conexionBBD = mongoose.connect(`${CONFIDENCE.URLDB}`,{
