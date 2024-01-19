@@ -41,7 +41,7 @@ const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunctio
             break;
         case 'EMAIL_PASSWORD':
             statusCode = 419;
-            message = 'Email o contraseña inválidos';
+            message = 'Email , Nombre de Usuario o Contraseña inválidos';
             break;
         case 'MISSING_DATA':
             statusCode = 422;
