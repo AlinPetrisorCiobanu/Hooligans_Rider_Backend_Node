@@ -30,6 +30,10 @@ const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunctio
             statusCode = 404;
             message = 'Lo siento, no hemos encontrado';
             break;
+        case 'UNAUTHORIZATION':
+            statusCode = 405;
+            message = 'No autorizado';
+            break;
         case 'NOT_ALLOWED':
             statusCode = 405;
             message = 'Lo siento, no tienes permiso';
@@ -47,6 +51,10 @@ const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunctio
             statusCode = 422;
             message = 'Faltan datos';
             break;
+        case 'MISSING_DATA_MODIFY':
+            statusCode = 422;
+            message = 'Introduce Al menos un campo';
+            break;
         case 'DELETED':
             statusCode = 423;
             message = 'Este usuario está bloqueado';
@@ -56,7 +64,7 @@ const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunctio
             message = 'Error del servidor';
     }
 
-    res.status(statusCode).header('Content-Type', 'application/json').json({ succes , message });
+    res.status(statusCode).header('Content-Type', 'application/json').json({ succes, message });
 
 }
 export default errorHandler;

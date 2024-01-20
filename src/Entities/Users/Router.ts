@@ -1,5 +1,7 @@
 import express from "express";
-import { login, register } from "./Controller";
+import { login, modify_user, register } from "./Controller";
+import { validateToken } from "../../Middleware/Authorization";
+import { AuthenticatedRequest } from "../../Types/Type_Auth";
 
 const router = express.Router()
 
@@ -15,6 +17,15 @@ router.post('/register',async (req,res,next)=>{
 router.post('/login',async (req,res,next)=>{
     try{
         res.status(201).json(await login(req.body))
+    }
+    catch(e){
+        next(e)
+    }
+})
+
+router.put('/modify_user/:id?', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
+    try{
+        res.status(200).json(await modify_user(req.user! , req.params.id , req.body))
     }
     catch(e){
         next(e)
