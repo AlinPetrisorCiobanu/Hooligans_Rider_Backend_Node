@@ -135,3 +135,41 @@ export const modify_user = async (data_token: DataToken, id: String | undefined,
         throw new Error('BAD_REQUEST')
     }
 }
+
+export const delete_user = async (data_token: DataToken, id: String | undefined) => {
+
+    const user_token: UserModel | undefined = data_token.user
+
+    if(user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+    if(user_token.is_active === false) throw new Error('DELETED')
+
+    if (user_token.role === "user" || user_token.role === "rider") { id = user_token._id }
+    if (!id){ id = user_token._id }
+
+    let user_to_delete
+    try{
+        user_to_delete = await User.findById(id)
+    }catch{
+        throw new Error('NOT_FOUND')
+    }
+
+    try {
+        if (user_to_delete) {
+            user_to_delete.is_active = false
+            await user_to_delete.save();
+            return {
+                success: true,
+                message: "Usuario borrado",
+            };
+        } else {
+            return {
+                success: false,
+                message: "No hay usuario para borrar",
+            };
+        }
+
+    } catch (err) {
+        console.log(err)
+        throw new Error('BAD_REQUEST')
+    }
+}

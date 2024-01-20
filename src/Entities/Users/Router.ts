@@ -1,5 +1,5 @@
 import express from "express";
-import { login, modify_user, register } from "./Controller";
+import { delete_user, login, modify_user, register } from "./Controller";
 import { validateToken } from "../../Middleware/Authorization";
 import { AuthenticatedRequest } from "../../Types/Type_Auth";
 
@@ -26,6 +26,15 @@ router.post('/login',async (req,res,next)=>{
 router.put('/modify_user/:id?', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
     try{
         res.status(200).json(await modify_user(req.user! , req.params.id , req.body))
+    }
+    catch(e){
+        next(e)
+    }
+})
+
+router.put('/delete_user/:id?', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
+    try{
+        res.status(200).json(await delete_user(req.user! , req.params.id ))
     }
     catch(e){
         next(e)
