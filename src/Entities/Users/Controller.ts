@@ -62,14 +62,14 @@ export const modify_user = async (data_token: DataToken, id: String | undefined,
 
     if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
     if (!(data.name || data.last_name || data.date || data.phone || data.email || data.nickname || data.password)) throw new Error('MISSING_DATA_MODIFY')
-    
+
     if (user_token.role === "user" || user_token.role === "rider") { id = user_token._id }
-    if (!id){ id = user_token._id }
+    if (!id) { id = user_token._id }
 
     let user_to_update
-    try{
+    try {
         user_to_update = await User.findById(id)
-    }catch{
+    } catch {
         throw new Error('NOT_FOUND')
     }
 
@@ -115,7 +115,7 @@ export const modify_user = async (data_token: DataToken, id: String | undefined,
             }
         }
     }
-    
+
     try {
         if (user_to_update) {
             await user_to_update.save();
@@ -131,7 +131,6 @@ export const modify_user = async (data_token: DataToken, id: String | undefined,
         }
 
     } catch (err) {
-        console.log(err)
         throw new Error('BAD_REQUEST')
     }
 }
@@ -140,16 +139,16 @@ export const delete_user = async (data_token: DataToken, id: String | undefined)
 
     const user_token: UserModel | undefined = data_token.user
 
-    if(user_token === undefined) throw new Error('INVALID_CREDENTIALS')
-    if(user_token.is_active === false) throw new Error('DELETED')
+    if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+    if (user_token.is_active === false) throw new Error('DELETED')
 
     if (user_token.role === "user" || user_token.role === "rider") { id = user_token._id }
-    if (!id){ id = user_token._id }
+    if (!id) { id = user_token._id }
 
     let user_to_delete
-    try{
+    try {
         user_to_delete = await User.findById(id)
-    }catch{
+    } catch {
         throw new Error('NOT_FOUND')
     }
 
@@ -169,7 +168,72 @@ export const delete_user = async (data_token: DataToken, id: String | undefined)
         }
 
     } catch (err) {
-        console.log(err)
         throw new Error('BAD_REQUEST')
+    }
+}
+
+export const data_user = async (data_token: DataToken, id: String | undefined) => {
+    const user_token: UserModel | undefined = data_token.user
+    let user;
+
+    if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+    if (user_token.is_active === false) throw new Error('DELETED')
+
+    try {
+        if (!id) {
+            user = await User.findById(user_token._id)
+        } else {
+            if (user_token.role === "user" || user_token.role === "rider") { id = user_token._id }
+            user = await User.findById(id)
+        }
+
+        try {
+            if (user) {
+                return {
+                    success: true,
+                    message: "Usuario",
+                    data: user
+                };
+            } else {
+                return {
+                    success: false,
+                    message: "No hay usuario para mostrar",
+                };
+            }
+
+        } catch (err) {
+            throw new Error('BAD_REQUEST')
+        }
+    } catch {
+        throw new Error('NOT_FOUND')
+    }
+}
+
+export const list_users = async (data_token: DataToken) => {
+    const user_token: UserModel | undefined = data_token.user
+
+    if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+    
+    if (user_token.is_active === false) throw new Error('DELETED')
+
+    if (user_token.role === "user" || user_token.role === "rider") throw new Error('UNAUTHORIZATION')
+    
+    const users = await User.find({});
+
+    try {
+        if (users) {
+            return {
+                success: true,
+                message: "Usuario",
+                data: users
+            };
+        } else {
+            return {
+                success: false,
+                message: "No hay usuario para mostrar",
+            };
+        }
+    } catch {
+        throw new Error('NOT_FOUND')
     }
 }
