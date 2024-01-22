@@ -11,7 +11,7 @@ export interface EventModel extends Document {
     details : string,
     id_user : string ,
     maps : string,
-    particiapnts : string,
+    participants : string,
     is_active : boolean,
     confirmed : boolean,
 }

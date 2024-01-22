@@ -146,14 +146,10 @@ export const delete_user = async (data_token: DataToken, id: String | undefined)
     if (user_token.role === "user" || user_token.role === "rider") { id = user_token._id }
     if (!id) { id = user_token._id }
 
-    let user_to_delete
+    
+    
     try {
-        user_to_delete = await User.findById(id)
-    } catch {
-        throw new Error('NOT_FOUND')
-    }
-
-    try {
+        const user_to_delete = await User.findById(id)
         if (user_to_delete) {
             user_to_delete.is_active = false
             await user_to_delete.save();

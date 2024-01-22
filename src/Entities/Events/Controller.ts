@@ -22,6 +22,9 @@ export const new_event = async (data_token: DataToken, data_event: EventModel) =
     if (!(date instanceof Date)) throw new Error('BAD_DATE_REQUEST');
     if (date < dateNow) throw new Error('INVALID_CREDENTIALS');
 
+    const event = await Event.findOne({date:data_event.date})
+    if(event) throw new Error('ALLREADY_EXIST')
+
     try {
         data_event.id_user = data_token._id;
         data_event.is_active = true
@@ -38,7 +41,7 @@ export const new_event = async (data_token: DataToken, data_event: EventModel) =
     }
 }
 
-export const list_active_events =async (data_token:DataToken , page_params : string) => {
+export const list_active_events = async (data_token: DataToken, page_params: string) => {
     const user_token: UserModel | undefined = data_token.user
 
     let page = page_params ? parseFloat(page_params) : 1
@@ -75,5 +78,71 @@ export const list_active_events =async (data_token:DataToken , page_params : str
         }
     } catch (error) {
         throw new Error('NOT_FOUND')
+    }
+}
+
+export const list_inactive_events = async (data_token: DataToken, page_params: string) => {
+    const user_token: UserModel | undefined = data_token.user
+
+    let page = page_params ? parseFloat(page_params) : 1
+    const pageSize = 1;
+
+    const options = {
+        page,
+        limit: pageSize
+    };
+
+    if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+
+    if (user_token.is_active === false) throw new Error('DELETED')
+
+    try {
+        let events = await Event.paginate({ is_active: false }, options)
+
+        if (page > events.totalPages) {
+            options.page = 1;
+            events = await Event.paginate({ is_active: false }, options)
+        }
+
+        if (events.docs.length > 0) {
+            return {
+                success: true,
+                message: "Eventos",
+                data: events
+            };
+        } else {
+            return {
+                success: false,
+                message: "No hay eventos para mostrar",
+            };
+        }
+    } catch (error) {
+        throw new Error('NOT_FOUND')
+    }
+}
+
+export const delete_event = async (data_token: DataToken, id_event: any) => {
+
+    const user_token: UserModel | undefined = data_token.user
+
+    if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+
+    if (user_token.is_active === false) throw new Error('DELETED')
+
+
+    try {
+        const event = await Event.findById(id_event)
+        if (event) {
+            event.is_active = false
+            await event.save()
+            return {
+                success: true,
+                message: "Usuario borrado",
+            };
+        } else {
+            throw new Error('NOT_FOUND')
+        }
+    } catch (error) {
+        throw new Error('BAD_REQUEST')
     }
 }
