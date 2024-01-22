@@ -50,9 +50,9 @@ router.get('/data_user/:id?', validateToken ,async (req:AuthenticatedRequest , r
     }
 })
 
-router.get('/list_users', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
+router.get('/list_users/:page?', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
     try{
-        res.status(200).json(await list_users(req.user! ))
+        res.status(200).json(await list_users(req.user! , req.params.page ))
     }
     catch(e){
         next(e)

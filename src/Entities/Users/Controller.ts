@@ -5,6 +5,7 @@ import User, { UserModel } from "./Modelo"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
+
 export const register = async (data: UserModel) => {
 
     if (!data.name || !data.last_name || !data.date || !data.phone || !data.email || !data.nickname || !data.password) throw new Error('MISSING_DATA')
@@ -209,19 +210,34 @@ export const data_user = async (data_token: DataToken, id: String | undefined) =
     }
 }
 
-export const list_users = async (data_token: DataToken) => {
+export const list_users = async (data_token: DataToken, page_params: string) => {
     const user_token: UserModel | undefined = data_token.user
 
+    let page = page_params ? parseFloat(page_params) : 1
+    const pageSize = 2;
+
+    const options = {
+        page,
+        limit: pageSize
+    };
+
     if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
-    
+
     if (user_token.is_active === false) throw new Error('DELETED')
 
     if (user_token.role === "user" || user_token.role === "rider") throw new Error('UNAUTHORIZATION')
-    
-    const users = await User.find({});
+
 
     try {
-        if (users) {
+
+        let users = await User.paginate({}, options)
+
+        if (page > users.totalPages) {
+            options.page = 1;
+            users = await User.paginate({}, options)
+        }
+
+        if (users.docs.length > 0) {
             return {
                 success: true,
                 message: "Usuario",

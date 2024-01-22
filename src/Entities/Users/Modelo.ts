@@ -1,5 +1,7 @@
-import {model,Schema,Document} from "mongoose";
-export interface UserModel extends Document {
+import {model,Schema,Document, PaginateModel} from "mongoose";
+import paginate from "mongoose-paginate-v2"
+
+export interface UserModel extends Document{
     id : any,
     name : string , 
     last_name : string ,
@@ -12,7 +14,8 @@ export interface UserModel extends Document {
     is_active:boolean,
     confirmed:boolean,
 }
-export const userSchema = new Schema({
+interface UserPaginateModel extends PaginateModel<UserModel> {}
+export const UserSchema = new Schema({
     name : {
         type : String,
         require : true,
@@ -65,7 +68,8 @@ export const userSchema = new Schema({
     },
 },{versionkey:true,timestamps:true});
 
+UserSchema.plugin(paginate)
 
-const User = model<UserModel>('User',userSchema);
+const User = model<UserModel>('User',UserSchema) as UserPaginateModel
 
 export default User;
