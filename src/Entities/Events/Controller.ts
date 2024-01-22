@@ -37,3 +37,43 @@ export const new_event = async (data_token: DataToken, data_event: EventModel) =
         throw new Error('BAD_REQUEST')
     }
 }
+
+export const list_active_events =async (data_token:DataToken , page_params : string) => {
+    const user_token: UserModel | undefined = data_token.user
+
+    let page = page_params ? parseFloat(page_params) : 1
+    const pageSize = 1;
+
+    const options = {
+        page,
+        limit: pageSize
+    };
+
+    if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+
+    if (user_token.is_active === false) throw new Error('DELETED')
+
+    try {
+        let events = await Event.paginate({ is_active: true }, options)
+
+        if (page > events.totalPages) {
+            options.page = 1;
+            events = await Event.paginate({ is_active: true }, options)
+        }
+
+        if (events.docs.length > 0) {
+            return {
+                success: true,
+                message: "Eventos",
+                data: events
+            };
+        } else {
+            return {
+                success: false,
+                message: "No hay eventos para mostrar",
+            };
+        }
+    } catch (error) {
+        throw new Error('NOT_FOUND')
+    }
+}

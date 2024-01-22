@@ -1,4 +1,6 @@
-import {model,Schema,Document} from "mongoose";
+import {model,Schema,Document, PaginateModel} from "mongoose";
+import paginate from "mongoose-paginate-v2"
+
 export interface EventModel extends Document {
     id : any,
     name : string , 
@@ -13,7 +15,10 @@ export interface EventModel extends Document {
     is_active : boolean,
     confirmed : boolean,
 }
-export const events_Schema = new Schema({
+
+interface UserPaginateModel extends PaginateModel<EventModel> {}
+
+export const Events_Schema = new Schema({
     name : {
         type : String,
         require : true,
@@ -66,7 +71,8 @@ export const events_Schema = new Schema({
     },
 },{versionkey:true,timestamps:true});
 
+Events_Schema.plugin(paginate)
 
-const Event = model<EventModel>('Events',events_Schema);
+const Event = model<EventModel>('Events',Events_Schema) as UserPaginateModel
 
 export default Event;
