@@ -1,4 +1,4 @@
-import {model,Schema,Document, PaginateModel} from "mongoose";
+import mongoose, {model,Schema,Document, PaginateModel} from "mongoose";
 import paginate from "mongoose-paginate-v2"
 
 export interface EventModel extends Document {
@@ -12,6 +12,7 @@ export interface EventModel extends Document {
     id_user : string ,
     maps : string,
     participants : string,
+    participants_ids : Array<"a">,
     is_active : boolean,
     confirmed : boolean,
 }
@@ -50,7 +51,7 @@ export const Events_Schema = new Schema({
         maxlength : 800,
         },
     id_user: {
-        type : String,
+        type: mongoose.Schema.Types.ObjectId,
         ref : "User"
         },
     maps:{
@@ -58,9 +59,13 @@ export const Events_Schema = new Schema({
         require:true,
     },
     participants:{
-        type:String,
+        type:Number,
         default : 1 ,
     },
+    participants_ids:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref : "User"
+    }],
     is_active:{
         type:Boolean,
         default : false

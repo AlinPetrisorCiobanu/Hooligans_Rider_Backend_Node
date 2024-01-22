@@ -1,5 +1,5 @@
 import express from "express";
-import { delete_event, list_active_events, list_inactive_events, new_event } from "./Controller";
+import { add_participant_event, delete_event, list_active_events, list_inactive_events, new_event } from "./Controller";
 import { validateToken } from "../../Middleware/Authorization";
 import { AuthenticatedRequest } from "../../Types/Type_Auth";
 
@@ -35,6 +35,15 @@ router.get('/inactive_events/:page?', validateToken ,async (req:AuthenticatedReq
 router.put('/delete_event/:id', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
     try{
         res.status(200).json(await delete_event(req.user! , req.params.id))
+    }
+    catch(e){
+        next(e)
+    }
+})
+
+router.put('/add_participant_event/:id', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
+    try{
+        res.status(200).json(await add_participant_event(req.user! , req.params.id))
     }
     catch(e){
         next(e)

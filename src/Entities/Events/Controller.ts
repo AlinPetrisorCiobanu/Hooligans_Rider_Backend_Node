@@ -26,7 +26,8 @@ export const new_event = async (data_token: DataToken, data_event: EventModel) =
     if (event) throw new Error('ALLREADY_EXIST')
 
     try {
-        data_event.id_user = data_token._id;
+        data_event.id_user = user_token._id;
+        data_event.participants_ids = [user_token._id]
         data_event.is_active = true
         data_event.confirmed = false
 
@@ -138,6 +139,38 @@ export const delete_event = async (data_token: DataToken, id_event: any) => {
             return {
                 success: true,
                 message: "Evento borrado con exito",
+            };
+        } else {
+            throw new Error('NOT_FOUND')
+        }
+    } catch (error) {
+        throw new Error('NOT_FOUND')
+    }
+}
+
+export const add_participant_event = async (data_token: DataToken, id_event: any) => {
+
+    const user_token: UserModel | undefined = data_token.user
+
+    if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+
+    if (user_token.is_active === false) throw new Error('DELETED')
+    const event = await Event.findOne({ _id: id_event })
+    if (event !== null && event.is_active === false) throw new Error('EVENT_DELETED')
+    const id_exist = event?.participants_ids.includes(user_token._id)
+    if (id_exist) throw new Error('ALLREADY_EXIST')
+
+    try {
+        if (event) {
+
+            event.participants = event.participants + 1;
+            event.participants_ids.push(user_token._id)
+
+            await event.save()
+
+            return {
+                success: true,
+                message: "Participante añadido con exito",
             };
         } else {
             throw new Error('NOT_FOUND')
