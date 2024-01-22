@@ -32,7 +32,7 @@ router.get('/inactive_events/:page?', validateToken ,async (req:AuthenticatedReq
     }
 })
 
-router.put('/delete_events/:id?', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
+router.put('/delete_event/:id', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
     try{
         res.status(200).json(await delete_event(req.user! , req.params.id))
     }

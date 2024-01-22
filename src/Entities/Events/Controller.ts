@@ -22,8 +22,8 @@ export const new_event = async (data_token: DataToken, data_event: EventModel) =
     if (!(date instanceof Date)) throw new Error('BAD_DATE_REQUEST');
     if (date < dateNow) throw new Error('INVALID_CREDENTIALS');
 
-    const event = await Event.findOne({date:data_event.date})
-    if(event) throw new Error('ALLREADY_EXIST')
+    const event = await Event.findOne({ date: data_event.date })
+    if (event) throw new Error('ALLREADY_EXIST')
 
     try {
         data_event.id_user = data_token._id;
@@ -53,6 +53,7 @@ export const list_active_events = async (data_token: DataToken, page_params: str
     };
 
     if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
+    if (user_token.role === "user") throw new Error('UNAUTHORIZATION');
 
     if (user_token.is_active === false) throw new Error('DELETED')
 
@@ -128,21 +129,20 @@ export const delete_event = async (data_token: DataToken, id_event: any) => {
     if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
 
     if (user_token.is_active === false) throw new Error('DELETED')
-
-
+    const event = await Event.findOne({ _id: id_event })
+    if (event !== null && event.is_active === false) throw new Error('EVENT_DELETED')
     try {
-        const event = await Event.findById(id_event)
         if (event) {
             event.is_active = false
             await event.save()
             return {
                 success: true,
-                message: "Usuario borrado",
+                message: "Evento borrado con exito",
             };
         } else {
             throw new Error('NOT_FOUND')
         }
     } catch (error) {
-        throw new Error('BAD_REQUEST')
+        throw new Error('NOT_FOUND')
     }
 }

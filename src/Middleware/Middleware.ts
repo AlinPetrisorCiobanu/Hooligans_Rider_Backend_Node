@@ -59,6 +59,10 @@ const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunctio
             statusCode = 423;
             message = 'Este usuario está bloqueado';
             break;
+        case 'EVENT_DELETED':
+            statusCode = 423;
+            message = 'Este evento ya esta borrado';
+            break;
         default:
             statusCode = 500;
             message = 'Error del servidor';
