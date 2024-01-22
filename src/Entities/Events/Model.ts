@@ -1,9 +1,10 @@
 import {model,Schema,Document} from "mongoose";
-export interface EventsModel extends Document {
+export interface EventModel extends Document {
     id : any,
     name : string , 
     data : string ,
     date : string,
+    hour : string,
     img : string,
     details : string,
     id_user : string ,
@@ -26,6 +27,10 @@ export const events_Schema = new Schema({
         maxlength: 500
         },
     date: {
+        type : String,
+        require : true,
+        },
+    hour: {
         type : String,
         require : true,
         },
@@ -62,6 +67,6 @@ export const events_Schema = new Schema({
 },{versionkey:true,timestamps:true});
 
 
-const Events = model<EventsModel>('Events',events_Schema);
+const Event = model<EventModel>('Events',events_Schema);
 
-export default Events;
+export default Event;
