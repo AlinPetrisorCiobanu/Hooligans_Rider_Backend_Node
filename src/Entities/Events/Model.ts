@@ -50,7 +50,6 @@ export const events_Schema = new Schema({
     participants:{
         type:String,
         default : 1 ,
-        
     },
     is_active:{
         type:Boolean,
