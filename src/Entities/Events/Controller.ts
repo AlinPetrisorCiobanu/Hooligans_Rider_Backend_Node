@@ -161,11 +161,15 @@ export const add_participant_event = async (data_token: DataToken, id_event: any
     const id_exist = event?.participants_ids.includes(user_token._id)
     if (id_exist) throw new Error('ALLREADY_EXIST')
 
+    const participants_ids  = event?.participants_ids;
+
     try {
         if (event) {
 
             event.participants = event.participants + 1;
-            event.participants_ids.push(user_token._id)
+            participants_ids?.push(user_token._id)
+            if(participants_ids)
+            event.participants_ids = participants_ids
 
             await event.save()
 
@@ -193,15 +197,20 @@ export const remove_participant_event = async (data_token: DataToken, id_event: 
     if (event !== null && event.is_active === false) throw new Error('EVENT_DELETED')
 
     const id_exist = event?.participants_ids.includes(user_token._id)
-    console.log(id_exist)
-    if (id_exist) throw new Error('ALLREADY_NOT_EXIST')
+    
+    if (!id_exist) throw new Error('ALLREADY_NOT_EXIST')
 
     const indexId = event?.participants_ids.indexOf(user_token._id)
 
+    const participants_ids  = event?.participants_ids;
+
     try {
-        if (event && indexId) {
+        if (event) {
             event.participants = event.participants + (-1);
-            event.participants_ids.splice(indexId, 1)
+            if(indexId)
+            participants_ids?.splice(indexId, 1)
+            if(participants_ids)
+            event.participants_ids = participants_ids
             await event.save()
 
             return {
