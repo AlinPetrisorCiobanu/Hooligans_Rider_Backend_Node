@@ -2,7 +2,7 @@ import { DataToken } from "../../Types/Type_Auth"
 import { validateDate, validateEmail, validateLastName, validateName, validateNickname, validatePassword, validatePhone } from "../../Utils/Validator"
 import CONFIDENCE from "../../config/config_conexion"
 import User, { UserModel } from "./Modelo"
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 
