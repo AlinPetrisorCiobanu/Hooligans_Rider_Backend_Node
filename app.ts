@@ -13,7 +13,7 @@ app.listen(CONFIDENCE.PORTDB,()=>{
     console.log("Servidor OK")
 })
 
-app.get('/healthcheck', (_req, res) => {
+app.get('/', (_req, res) => {
     res.status(200).json({ status: 'OK' });
   });
 
