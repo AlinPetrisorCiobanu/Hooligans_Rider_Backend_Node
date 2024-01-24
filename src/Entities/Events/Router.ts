@@ -41,7 +41,7 @@ router.put('/delete_event/:id', validateToken ,async (req:AuthenticatedRequest ,
     }
 })
 
-router.put('/add_participant_event/:id', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
+router.patch('/add_participant_event/:id', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
     try{
         res.status(200).json(await add_participant_event(req.user! , req.params.id))
     }
@@ -50,7 +50,7 @@ router.put('/add_participant_event/:id', validateToken ,async (req:Authenticated
     }
 })
 
-router.put('/remove_participant_event/:id', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
+router.patch('/remove_participant_event/:id', validateToken ,async (req:AuthenticatedRequest , res , next)=>{
     try{
         res.status(200).json(await remove_participant_event(req.user! , req.params.id))
     }

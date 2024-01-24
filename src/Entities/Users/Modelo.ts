@@ -3,6 +3,7 @@ import paginate from "mongoose-paginate-v2"
 
 export interface UserModel extends Document{
     id : any,
+    img : string,
     name : string , 
     last_name : string ,
     date : string,
@@ -16,6 +17,9 @@ export interface UserModel extends Document{
 }
 interface UserPaginateModel extends PaginateModel<UserModel> {}
 export const UserSchema = new Schema({
+    img : {
+        type : String,
+        },
     name : {
         type : String,
         require : true,

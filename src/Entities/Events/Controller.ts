@@ -54,7 +54,6 @@ export const list_active_events = async (data_token: DataToken, page_params: str
     };
 
     if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
-    if (user_token.role === "user") throw new Error('UNAUTHORIZATION');
 
     if (user_token.is_active === false) throw new Error('DELETED')
 
@@ -150,8 +149,8 @@ export const delete_event = async (data_token: DataToken, id_event: any) => {
 
 export const add_participant_event = async (data_token: DataToken, id_event: any) => {
 
+    console.log(id_event)
     const user_token: UserModel | undefined = data_token.user
-
     if (user_token === undefined) throw new Error('INVALID_CREDENTIALS')
     if (user_token.is_active === false) throw new Error('DELETED')
 

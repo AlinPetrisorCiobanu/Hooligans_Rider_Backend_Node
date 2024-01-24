@@ -49,7 +49,7 @@ export const login = async (data: UserModel) => {
 
         return {
             succes: true,
-            message: user_exist,
+            data: user_exist,
             token: token
         }
     } catch (error) {
@@ -82,6 +82,9 @@ export const modify_user = async (data_token: DataToken, id: String | undefined,
     if (data.nickname) { if (!validateNickname(data.nickname)) { throw new Error('INVALID_CREDENTIALS') } }
     if (data.password) { if (!validatePassword(data.password)) { throw new Error('INVALID_CREDENTIALS') } }
 
+    if (user_to_update && data.img) {
+        user_to_update.img = data.img;
+    }
     if (user_to_update && data.name) {
         user_to_update.name = data.name;
     }
@@ -146,8 +149,8 @@ export const delete_user = async (data_token: DataToken, id: String | undefined)
     if (user_token.role === "user" || user_token.role === "rider") { id = user_token._id }
     if (!id) { id = user_token._id }
 
-    
-    
+
+
     try {
         const user_to_delete = await User.findById(id)
         if (user_to_delete) {
