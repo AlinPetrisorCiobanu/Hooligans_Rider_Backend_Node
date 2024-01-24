@@ -2,12 +2,9 @@
   "name": "backend_hooligan",
   "version": "1.0.0",
   "main": "./dist/app.js",
-  "engines": {
-    "node": "14.x"
-  },
   "scripts": {
-    "start": "tsc && node -r dotenv-safe/config",
-    "dev": "tsc ./src/*.tsc --outDir ./dist",
+    "start": "node -r dotenv-safe/config ./dist/app.js",
+    "dev": "tsc && nodemon ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

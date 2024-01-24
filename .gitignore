@@ -2,3 +2,4 @@ requires.txt
 dist/
 node_modules/
 .env
+.vercel
