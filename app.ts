@@ -13,6 +13,10 @@ app.listen(CONFIDENCE.PORTDB,()=>{
     console.log("Servidor OK")
 })
 
+app.get('/healthcheck', (_req, res) => {
+    res.status(200).json({ status: 'OK' });
+  });
+
 //middlewares
 app.use(express.urlencoded({extended: false}))
 app.use(express.json());
