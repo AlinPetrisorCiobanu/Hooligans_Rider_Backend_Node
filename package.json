@@ -2,6 +2,9 @@
   "name": "backend_hooligan",
   "version": "1.0.0",
   "main": "./dist/app.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "tsc && node -r dotenv-safe/config",
     "dev": "tsc ./src/*.tsc --outDir ./dist",
