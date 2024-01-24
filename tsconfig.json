@@ -1,22 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "moduleResolution": "Node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
-}
+      "target": "es6",
+      "module": "commonjs",
+      "sourceMap": true,
+      "strictNullChecks": true,
+      "outDir": "dist/",
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop":true
+  }    
+}   
